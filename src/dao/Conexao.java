@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Conexao {
-	private String host = "remotemysql.com";
-	private String db = "dYSzi6QGVh";
-	private String user = "dYSzi6QGVh";
-	private String password = "PJjAtWpoS1";
+	private String host = "localhost";
+	private String db = "projeto";
+	private String user = "root";
+	private String password = "";
 	private int port = 3306;
 	private String url = String.format("jdbc:mysql://%s:%d/%s", this.host, this.port, this.db);
 	private Connection con;

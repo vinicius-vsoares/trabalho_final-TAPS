@@ -3,22 +3,18 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
-import java.time.LocalDate;
-
 import dao.FormularioDAO;
 import modelo.Aluno;
 import modelo.Formulario;
-import modelo.Usuario;
 import view.TelaFormulario;
 
 public class FormularioController implements ActionListener {
 	private Formulario form;
 	private TelaFormulario telaForm;
-	private FormularioDAO formDAO;
 	private Aluno alu;
 	
 	
-	public FormularioController(TelaFormulario telaForm, Aluno aluu) {
+	public FormularioController(TelaFormulario telaForm, Aluno alu) {
 		super();
 		this.alu = alu;
 		this.telaForm = telaForm;
@@ -28,12 +24,12 @@ public class FormularioController implements ActionListener {
 	}
 
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getActionCommand().equals("Enviar")) {
-			@SuppressWarnings("deprecation")
-			Date data = new Date(this.telaForm.getComboBoxMes().getSelectedIndex(), this.telaForm.getComboBoxDia().getSelectedIndex(), this.telaForm.getComboBoxAno().getSelectedIndex());
+			new Date(this.telaForm.getComboBoxMes().getSelectedIndex(), this.telaForm.getComboBoxDia().getSelectedIndex(), this.telaForm.getComboBoxAno().getSelectedIndex());
 //			this.form.setData_ini((java.sql.Date) data);
 			//this.form.setData((java.sql.Date) new Date());
 			this.form.setObs(this.telaForm.getObs().getText());

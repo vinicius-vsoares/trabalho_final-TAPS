@@ -10,6 +10,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 public class Panel_Coordenador_Formularios_Renderer extends DefaultListCellRenderer{
+	public Panel_Coordenador_Formularios_Renderer() {
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8392962839719977464L;
 
 	public Component getListCellRendererComponent(JList list,Object value,int index,boolean iss,boolean chf){
 	        

@@ -1,7 +1,5 @@
 package modelo;
 
-import java.sql.Date;
-
 public class Formulario {
 	private long id;
 	private Aluno aluno;

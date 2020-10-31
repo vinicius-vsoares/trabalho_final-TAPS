@@ -9,9 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-
 import net.miginfocom.swing.MigLayout;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;

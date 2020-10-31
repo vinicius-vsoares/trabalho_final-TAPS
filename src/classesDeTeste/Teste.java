@@ -1,11 +1,8 @@
 package classesDeTeste;
 
 
-import dao.AlunoDAO;
 import dao.CoordenadorDAO;
-import modelo.Aluno;
 import modelo.Coordenador;
-import modelo.Usuario;
 
 public class Teste {
 	public static void main(String[] args) {

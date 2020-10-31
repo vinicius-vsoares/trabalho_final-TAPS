@@ -8,6 +8,10 @@ import javax.swing.JScrollPane;
 
 public class Panel_Coordenador_Formularios extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8781439275721681828L;
 	public JList<String> listForm;
 	public DefaultListModel<String> lModel;
 	public Panel_Coordenador_Formularios() {

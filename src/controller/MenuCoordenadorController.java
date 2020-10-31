@@ -4,15 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import com.mysql.cj.xdevapi.Result;
 
 import dao.FormularioDAO;
 import modelo.Aluno;
@@ -56,6 +50,7 @@ public class MenuCoordenadorController implements ActionListener {
 						Formulario f = formDAO.getForm(form.getAluno());
 						f.setCoord(form.getCoord());
 						FormularioVisualizacaoAluno fc = new FormularioVisualizacaoAluno();
+						@SuppressWarnings("unused")
 						FormularioCoordenadorController fcc = new FormularioCoordenadorController(f, fc);
 						fc.setLocationRelativeTo(null);
 						fc.setVisible(true);

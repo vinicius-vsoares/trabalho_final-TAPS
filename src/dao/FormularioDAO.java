@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import modelo.Aluno;
 import modelo.Formulario;
-import modelo.Usuario;
 
 public class FormularioDAO {
 	private Conexao conn;

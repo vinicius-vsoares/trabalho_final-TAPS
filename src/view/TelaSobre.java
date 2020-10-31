@@ -41,7 +41,7 @@ public class TelaSobre extends JFrame {
 
 		JTextArea txtrSoftwareDesenvolvidoPara = new JTextArea();
 		txtrSoftwareDesenvolvidoPara.setText(
-				"Software desenvolvido para a discplina de Programa\u00E7\u00E3o Orientada a \r\nObjetos II.\r\nDesenvolvido por: \r\n\tRodrigo Seger\r\n\tGuilherme Nique\r\n\tJos\u00E9 Linch\r\n\tVin\u00EDcius Soares\r\n\tJ\u00FAlio Schr\u00F6der\r\n\tPedro Rodrigues\r\n\r\nUniversidade Federal de Ci\u00EAncias da Sa\u00FAde de Porto Alegre - 2019");
+				"Software desenvolvido para a discplina de Programa\u00E7\u00E3o Orientada a \r\nObjetos II.\r\nDesenvolvido por: \r\n\tRodrigo Seger\r\n\tGuilherme Nique\r\n\tJos\u00E9 Linch\r\n\tVin\u00EDcius Soares\r\n\tJ\u00FAlio Schr\u00F6der\r\n\tPedro Rodrigues\r\n\r\n     Universidade Federal de Ci\u00EAncias da Sa\u00FAde de Porto Alegre");
 		txtrSoftwareDesenvolvidoPara.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		txtrSoftwareDesenvolvidoPara.setEditable(false);
 		txtrSoftwareDesenvolvidoPara.setBackground(SystemColor.menu);
