@@ -18,17 +18,17 @@ public class CoordenadorDAO {
 		conexaoBD = new Conexao();
 	}
 
-	public void insertCoord() {
+	public void insertCoordenador() {
 		conexaoBD.execute("insert into Usuario(matricula,nome,senha) values('" + coordenador.getIdUsuario() + "','"
 				+ coordenador.getNome() + "','" + coordenador.getSenha() + "');");
 		conexaoBD.execute("insert into Coordenador(matricula_coord) values(" + coordenador.getIdUsuario() + ");");
 	}
 
-	public ResultSet selectCoord(String s) {
+	public ResultSet selectCoordenador(String s) {
 		return conexaoBD.select("select * from coordenador c" + s);
 	}
 
-	public boolean isCoord() {
+	public boolean isCoordenador() {
 		conexaoBD.getConexaoBD();
 		String query = "select count(matricula_coord) as 'count' from Coordenador where matricula ='"
 				+ coordenador.getIdUsuario() + "';";

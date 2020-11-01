@@ -40,6 +40,7 @@ public class AlunoDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		if (linhas == 1)
 			return false;
 		else

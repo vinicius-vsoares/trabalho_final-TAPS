@@ -69,7 +69,7 @@ public class FormularioCriacaoAlunoController implements ActionListener {
 				this.formulario.setAluno(aluno);
 
 				formularioDAO = new FormularioDAO(this.formulario);
-				if (formularioDAO.insertForm()) {
+				if (formularioDAO.insertFormulario()) {
 					TelaMenu telaMenu = new TelaMenu();
 					telaMenu.setVisible(true);
 					this.telaFormulario.dispose();

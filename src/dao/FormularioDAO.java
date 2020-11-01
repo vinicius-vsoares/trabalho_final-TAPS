@@ -20,7 +20,7 @@ public class FormularioDAO {
 		this.formulario = form;
 	}
 
-	public boolean insertForm() {
+	public boolean insertFormulario() {
 		try {
 			int id = conexaoBD.execute(
 					"insert into Formulario(telefone,area_atual,area_nova,data_ini,data,obs,matricula_aluno,matricula_coord) values('"
