@@ -3,32 +3,32 @@ package dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import modelo.Aluno;
-import modelo.Usuario;
+import model.Aluno;
+import model.Usuario;
 
 public class UsuarioDAO {
-	private Conexao conn;
+	private Conexao conexaoBD;
 	private Usuario usuario;
 
 	public UsuarioDAO(Usuario usuario) {
-		conn = new Conexao();
+		conexaoBD = new Conexao();
 		this.usuario = usuario;
 	}
 
 	public UsuarioDAO() {
-		conn = new Conexao();
+		conexaoBD = new Conexao();
 	}
 
 	public Usuario login() {
-		conn.getConexao();
-		String query = "select * from Usuario where matricula ='" + usuario.getId_usuario() + "' and senha='"
+		conexaoBD.getConexaoBD();
+		String query = "select * from Usuario where matricula ='" + usuario.getIdUsuario() + "' and senha='"
 				+ usuario.getSenha() + "';";
 		try {
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
-			res.next();
+			ResultSet resultSet = conexaoBD.getCon().prepareStatement(query).executeQuery();
+			resultSet.next();
 
-			if (res.getRow() == 1) {
-				usuario.setNome(res.getString("nome"));
+			if (resultSet.getRow() == 1) {
+				usuario.setNome(resultSet.getString("nome"));
 				return usuario;
 			} else {
 				usuario = null;
@@ -37,23 +37,23 @@ public class UsuarioDAO {
 		} catch (SQLException e) {
 			return null;
 		} finally {
-			conn.close();
+			conexaoBD.close();
 		}
 	}
 	
 	
 	public Aluno getAluno() {
-		conn.getConexao();
+		conexaoBD.getConexaoBD();
 		Aluno aluno = new Aluno();
-		String query = "select * from Aluno where matricula_aluno ='" + usuario.getId_usuario() 
+		String query = "select * from Aluno where matricula_aluno ='" + usuario.getIdUsuario() 
 				+ "';";
 		try {
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
-			res.next();
+			ResultSet resultSet = conexaoBD.getCon().prepareStatement(query).executeQuery();
+			resultSet.next();
 
-			if (res.getRow() == 1) {
-				aluno.setSerie(Integer.parseInt(res.getString("serie")));
-				aluno.setMatricula_coord(res.getString("matricula_coord"));
+			if (resultSet.getRow() == 1) {
+				aluno.setSerie(Integer.parseInt(resultSet.getString("serie")));
+				aluno.setMatriculaCoordenador(resultSet.getString("matricula_coord"));
 				return aluno;
 			} else {
 				aluno = null;
@@ -62,7 +62,7 @@ public class UsuarioDAO {
 		} catch (SQLException e) {
 			return null;
 		} finally {
-			conn.close();
+			conexaoBD.close();
 		}
 	}
 

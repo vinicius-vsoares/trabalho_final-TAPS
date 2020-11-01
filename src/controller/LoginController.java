@@ -6,92 +6,101 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import dao.UsuarioDAO;
-import modelo.Aluno;
-import modelo.Coordenador;
-import modelo.Usuario;
+import model.Aluno;
+import model.Coordenador;
+import model.Usuario;
 import view.TelaMenu;
 import view.TelaCadastro;
 import view.TelaLogin;
 
 public class LoginController implements ActionListener {
-	private TelaLogin tl;
+	private TelaLogin telaLogin;
 
-	public LoginController(TelaLogin tl) {
+	public LoginController(TelaLogin telaLogin) {
 		super();
-		this.tl = tl;
-		this.tl.getBtLimpar().addActionListener(this);
-		this.tl.getBtCadastro().addActionListener(this);
-		this.tl.getBtLogin().addActionListener(this);
+		this.telaLogin = telaLogin;
+		this.telaLogin.getBtLimpar().addActionListener(this);
+		this.telaLogin.getBtCadastro().addActionListener(this);
+		this.telaLogin.getBtLogin().addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Limpar")) {
-			this.tl.getTfUsuario().setText("");
-			this.tl.getTfSenha().setText("");
+			limparCampos(telaLogin);
 		}
 		if (e.getActionCommand().equals("Cadastrar")) {
-			this.tl.setVisible(false);
-			this.tl.dispose();
-			TelaCadastro tc = new TelaCadastro();
-			new CadastroController(tc);
-			tc.setVisible(true);
-			tc.setLocationRelativeTo(null);
+
+			TelaCadastro telaCadastro = new TelaCadastro();
+			cadastro(telaLogin, telaCadastro);
 		}
 
 		if (e.getActionCommand().equals("Logar")) {
-			if (!this.tl.getTfUsuario().getText().isEmpty() && (!(this.tl.getTfSenha().getPassword().length == 0))) {
-				if (!this.tl.getTfUsuario().getText().isEmpty()
-						&& (!(this.tl.getTfSenha().getPassword().length == 0))) {
+			if (!this.telaLogin.getTfUsuario().getText().isEmpty()
+					&& (!(this.telaLogin.getTfSenha().getPassword().length == 0))) {
+				if (!this.telaLogin.getTfUsuario().getText().isEmpty()
+						&& (!(this.telaLogin.getTfSenha().getPassword().length == 0))) {
 
 					Usuario usuarioLogin = new Usuario();
-					usuarioLogin.setId_usuario(this.tl.getTfUsuario().getText());
-					usuarioLogin.setSenha(new String(this.tl.getTfSenha().getPassword()));
-
-					UsuarioDAO usDAO = new UsuarioDAO(usuarioLogin);
-					Usuario usuario = usDAO.login();
-
-					if (usuario != null) {
-						Aluno aluno = usDAO.getAluno();
-						if (aluno != null) {
-							aluno.setId_usuario(usuario.getId_usuario());
-							aluno.setNome(usuario.getNome());
-							aluno.setSenha(usuario.getSenha());
-
-							TelaMenu ma = new TelaMenu();
-							ma.setVisible(true);
-							ma.setLocationRelativeTo(null);
-							tl.dispose();
-							new MenuAlunoController(aluno, ma);
-
-						} else {
-
-							// login coordenador
-
-							Coordenador coordenador = new Coordenador();
-							coordenador.setId_usuario(usuario.getId_usuario());
-							coordenador.setNome(usuario.getNome());
-							coordenador.setSenha(usuario.getSenha());
-
-							TelaMenu mn = new TelaMenu();
-							mn.setVisible(true);
-							mn.setLocationRelativeTo(null);
-							tl.dispose();
-							new MenuCoordenadorController(coordenador, mn);
-
-						}
-
-					} else {
-						JOptionPane.showMessageDialog(tl, "Senha ou matricula incorreto!", "Erro",
-								JOptionPane.WARNING_MESSAGE);
-					}
+					logar(usuarioLogin, telaLogin);
 
 				} else {
-					JOptionPane.showMessageDialog(tl, "Existem campos vazios!", "Erro", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(telaLogin, "Senha ou matricula incorreto!", "Erro",
+							JOptionPane.WARNING_MESSAGE);
 				}
+
+			} else {
+				JOptionPane.showMessageDialog(telaLogin, "Existem campos vazios!", "Erro", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+	}
 
+	public void limparCampos(TelaLogin telaLogin) {
+		telaLogin.getTfUsuario().setText("");
+		telaLogin.getTfSenha().setText("");
+	}
+
+	public void cadastro(TelaLogin telaLogin, TelaCadastro telaCadastro) {
+		telaLogin.setVisible(false);
+		telaLogin.dispose();
+		new CadastroController(telaCadastro);
+		telaCadastro.setVisible(true);
+		telaCadastro.setLocationRelativeTo(null);
+	}
+
+	public Usuario logar(Usuario usuarioLogin, TelaLogin telaLogin2) {
+		usuarioLogin.setIdUsuario(this.telaLogin.getTfUsuario().getText());
+		usuarioLogin.setSenha(new String(this.telaLogin.getTfSenha().getPassword()));
+
+		UsuarioDAO usuarioDAO = new UsuarioDAO(usuarioLogin);
+		Usuario usuario = usuarioDAO.login();
+		TelaMenu telaMenu = new TelaMenu();
+		telaMenu.setVisible(true);
+		telaMenu.setLocationRelativeTo(null);
+		telaLogin.dispose();
+
+		if (usuario != null) {
+			Aluno aluno = usuarioDAO.getAluno();
+			if (aluno != null) {
+				aluno.setIdUsuario(usuario.getIdUsuario());
+				aluno.setNome(usuario.getNome());
+				aluno.setSenha(usuario.getSenha());
+
+				new MenuAlunoController(aluno, telaMenu);
+
+			} else {
+
+				// login coordenador
+
+				Coordenador coordenador = new Coordenador();
+				coordenador.setIdUsuario(usuario.getIdUsuario());
+				coordenador.setNome(usuario.getNome());
+				coordenador.setSenha(usuario.getSenha());
+
+				new MenuCoordenadorController(coordenador, telaMenu);
+			}
+		}
+		return usuario;
 	}
 
 }

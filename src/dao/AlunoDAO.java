@@ -3,43 +3,44 @@ package dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import modelo.Aluno;
+import model.Aluno;
 
 public class AlunoDAO {
-	private Conexao conn;
+	private Conexao conexaoBD;
 	private Aluno aluno;
 
 	public AlunoDAO(Aluno aluno) {
-		conn = new Conexao();
+		conexaoBD = new Conexao();
 		this.aluno = aluno;
 	}
 
 	public AlunoDAO() {
-		conn = new Conexao();
+		conexaoBD = new Conexao();
 	}
 
 	public void insertAluno() {
-		conn.execute("insert into Usuario(matricula,nome,senha) values('" + aluno.getId_usuario() + "','"
+		conexaoBD.execute("insert into Usuario(matricula,nome,senha) values('" + aluno.getIdUsuario() + "','"
 				+ aluno.getNome() + "','" + aluno.getSenha() + "');");
-		conn.execute("insert into Aluno(matricula_aluno,serie,matricula_coord) values('" + aluno.getId_usuario() + "',"
-				+ aluno.getSerie() + ",'" + aluno.getMatricula_coord() + "');");
+		conexaoBD.execute("insert into Aluno(matricula_aluno,serie,matricula_coord) values('" + aluno.getIdUsuario()
+				+ "'," + aluno.getSerie() + ",'" + aluno.getMatriculaCoordenador() + "');");
 
 	}
 
 	public boolean validaMatricula() {
-		conn.getConexao();
-		String query = "select count(matricula) as 'count' from Usuario where matricula ='" + aluno.getId_usuario()
+		conexaoBD.getConexaoBD();
+		String query = "select count(matricula) as 'count' from Usuario where matricula ='" + aluno.getIdUsuario()
 				+ "';";
 		int linhas = 0;
 		try {
 
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
-			if (res.next())
-				linhas = Integer.parseInt(res.getString("count"));
+			ResultSet resultSet = conexaoBD.getCon().prepareStatement(query).executeQuery();
+			if (resultSet.next())
+				linhas = Integer.parseInt(resultSet.getString("count"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		if (linhas == 1)
 			return false;
 		else
@@ -48,11 +49,11 @@ public class AlunoDAO {
 
 	public boolean validaCoordenador() {
 		String query = "select count(matricula_coord) as 'count' from Coordenador where matricula_coord ='"
-				+ aluno.getMatricula_coord() + "';";
+				+ aluno.getMatriculaCoordenador() + "';";
 		int linhas = 0;
 		try {
 
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
+			ResultSet res = conexaoBD.getCon().prepareStatement(query).executeQuery();
 			if (res.next())
 				linhas = Integer.parseInt(res.getString("count"));
 		} catch (SQLException e) {
@@ -66,15 +67,15 @@ public class AlunoDAO {
 	}
 
 	public boolean isUsuario() {
-		conn.getConexao();
-		String query = "select count(matricula) as 'count' from Usuario where matricula ='" + aluno.getId_usuario()
+		conexaoBD.getConexaoBD();
+		String query = "select count(matricula) as 'count' from Usuario where matricula ='" + aluno.getIdUsuario()
 				+ "';";
 		int linhas = 0;
 		try {
 
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
-			if (res.next())
-				linhas = Integer.parseInt(res.getString("count"));
+			ResultSet resultSet = conexaoBD.getCon().prepareStatement(query).executeQuery();
+			if (resultSet.next())
+				linhas = Integer.parseInt(resultSet.getString("count"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +87,7 @@ public class AlunoDAO {
 	}
 
 	public ResultSet selectAluno(String s) {
-		return conn.select("select * from aluno a" + s);
+		return conexaoBD.select("select * from aluno a" + s);
 	}
 
 	public Aluno getAluno() {
@@ -97,12 +98,12 @@ public class AlunoDAO {
 		this.aluno = aluno;
 	}
 
-	public Conexao getConn() {
-		return conn;
+	public Conexao getConexaoBD() {
+		return conexaoBD;
 	}
 
-	public void setConn(Conexao conn) {
-		this.conn = conn;
+	public void setConexaoBD(Conexao conexao) {
+		this.conexaoBD = conexao;
 	}
 
 }

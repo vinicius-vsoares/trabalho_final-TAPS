@@ -5,11 +5,11 @@ import view.TelaLogin;
 public class Main {
 
 	public static void main(String[] args) {
-		TelaLogin tl = new TelaLogin();
-		tl.setVisible(true);
-		tl.setLocationRelativeTo(null);
+		TelaLogin telaLogin = new TelaLogin();
+		telaLogin.setVisible(true);
+		telaLogin.setLocationRelativeTo(null);
 
-		new LoginController(tl);
+		new LoginController(telaLogin);
 	}
 
 }

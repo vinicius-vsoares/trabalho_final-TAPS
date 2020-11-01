@@ -7,72 +7,79 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import dao.FormularioDAO;
-import dao.Formulario_respostaDAO;
+import dao.FormularioRespostaDAO;
 import dao.ModulosDAO;
-import modelo.Aluno;
-import modelo.Formulario;
-import modelo.Formulario_resposta;
-import modelo.Modulos;
-import modelo.Troca_area;
+import model.Aluno;
+import model.Formulario;
+import model.FormularioResposta;
+import model.Modulos;
+import model.TrocaArea;
 import view.FormularioVisualizacaoAluno;
 import view.TelaLogin;
 import view.TelaMenu;
 import view.TelaSobre;
 
 public class FormularioVisualizacaoAlunoController implements ActionListener {
-	private Aluno alu;
-	private FormularioVisualizacaoAluno pva;
+	private Aluno aluno;
+	private FormularioVisualizacaoAluno formularioVisualizacaoAluno;
 
-	public FormularioVisualizacaoAlunoController(Aluno alu, FormularioVisualizacaoAluno pva) {
+	public FormularioVisualizacaoAlunoController(Aluno aluno, FormularioVisualizacaoAluno formularioVisualizacaoAluno) {
 		super();
-		this.alu = alu;
-		this.pva = pva;
+		this.aluno = aluno;
+		this.formularioVisualizacaoAluno = formularioVisualizacaoAluno;
 
-		this.pva.getMntmSair().addActionListener(this);
-		this.pva.getMntmPginaInicial().addActionListener(this);
-		this.pva.getMntmSobre().addActionListener(this);
-		
-		
-		FormularioDAO formDAO = new FormularioDAO();
-		Formulario form = formDAO.getForm(alu);
-		
-		this.pva.getTextFieldNome().setText(form.getAluno().getNome());
-		this.pva.getTfSerie().setText(Integer.toString(form.getAluno().getSerie()));
-		this.pva.getTextFieldAreaEstagio().setText(form.getArea_atual());
-		this.pva.getTextFieldNovaArea().setText(form.getArea_nova());
-		this.pva.getTextFieldTelefone().setText(form.getTelefone());
-		this.pva.getTextAreaObservacoes().setText(form.getObs());
-		
-		String data[] = form.getData().split("-");
+		this.formularioVisualizacaoAluno.getMntmSair().addActionListener(this);
+		this.formularioVisualizacaoAluno.getMntmPginaInicial().addActionListener(this);
+		this.formularioVisualizacaoAluno.getMntmSobre().addActionListener(this);
+
+		FormularioDAO formularioDAO = new FormularioDAO();
+		Formulario formulario = formularioDAO.getFormulario(aluno);
+
+		this.formularioVisualizacaoAluno.getTextFieldNome().setText(formulario.getAluno().getNome());
+		this.formularioVisualizacaoAluno.getTfSerie().setText(Integer.toString(formulario.getAluno().getSerie()));
+		this.formularioVisualizacaoAluno.getTextFieldAreaEstagio().setText(formulario.getAreaAtual());
+		this.formularioVisualizacaoAluno.getTextFieldNovaArea().setText(formulario.getNovaArea());
+		this.formularioVisualizacaoAluno.getTextFieldTelefone().setText(formulario.getTelefone());
+		this.formularioVisualizacaoAluno.getTextAreaObservacoes().setText(formulario.getObservacao());
+
+		String data[] = formulario.getData().split("-");
 		int calcAno = Integer.parseInt(data[0]) - 2019;
-		this.pva.getComboBoxAno().setSelectedIndex(calcAno+1);
-		this.pva.getComboBoxMes().setSelectedIndex(Integer.parseInt(data[1]));
-		this.pva.getComboBoxDia().setSelectedIndex(Integer.parseInt(data[2]));
-		Formulario_resposta formR = new Formulario_resposta();
-		formR.setForm(form);
-		Troca_area ta = new Formulario_respostaDAO(formR).getFormRDAO();
-		formR.setId(ta.getFormR().getId());
-		Troca_area ta2 = new Formulario_respostaDAO(formR).getFormRDAO2(ta);
-		ArrayList<Modulos> m = new ModulosDAO(new Modulos(formR)).getModulos();
-		this.pva.getTextFieldAreaAtual1().setText(ta.getArea());
-		this.pva.getTextFieldAreaAtual2().setText(ta2.getArea());
-		this.pva.getTextFieldAreaTroca1().setText(ta.getTa().getArea());
-		this.pva.getTextFieldAreaTroca2().setText(ta2.getTa().getArea());
-		this.pva.getTextFieldNroAlunosAreaAtual().setText(String.valueOf(ta.getAlunos()));
-		this.pva.getTextFieldNroAlunosAreaAtual2().setText(String.valueOf(ta2.getAlunos()));
-		this.pva.getTextFieldVagasAreaAtual().setText(String.valueOf(ta.getVagas()));
-		this.pva.getTextFieldVagasAreaAtual2().setText(String.valueOf(ta2.getVagas()));
-		this.pva.getTextFieldNroAlunosAreaTroca().setText(String.valueOf(ta.getTa().getAlunos()));
-		this.pva.getTextFieldNroAlunosAreaTroca2().setText(String.valueOf(ta2.getTa().getAlunos()));
-		this.pva.getTextFieldVagasAreaTroca().setText(String.valueOf(ta.getTa().getVagas()));
-		this.pva.getTextFieldVagasAreaTroca2().setText(String.valueOf(ta2.getTa().getVagas()));
-		this.pva.getTextAreaParecerAreasEnvolv().setText(ta.getFormR().getParecer_areas());
-		this.pva.getTextAreaParecerCoordernador().setText(ta.getFormR().getParacer_coord());
+		this.formularioVisualizacaoAluno.getComboBoxAno().setSelectedIndex(calcAno + 1);
+		this.formularioVisualizacaoAluno.getComboBoxMes().setSelectedIndex(Integer.parseInt(data[1]));
+		this.formularioVisualizacaoAluno.getComboBoxDia().setSelectedIndex(Integer.parseInt(data[2]));
+		FormularioResposta formularioResposta = new FormularioResposta();
+		formularioResposta.setFormulario(formulario);
+		TrocaArea trocaArea1 = new FormularioRespostaDAO(formularioResposta).getFormRespostaDAO();
+		formularioResposta.setIdFormulario(trocaArea1.getFormularioResposta().getIdFormulario());
+		TrocaArea trocaArea2 = new FormularioRespostaDAO(formularioResposta).getFormRDAO2(trocaArea1);
+		ArrayList<Modulos> modulos = new ModulosDAO(new Modulos(formularioResposta)).getModulos();
+		this.formularioVisualizacaoAluno.getTextFieldAreaAtual1().setText(trocaArea1.getArea());
+		this.formularioVisualizacaoAluno.getTextFieldAreaAtual2().setText(trocaArea2.getArea());
+		this.formularioVisualizacaoAluno.getTextFieldAreaTroca1().setText(trocaArea1.getTrocaArea().getArea());
+		this.formularioVisualizacaoAluno.getTextFieldAreaTroca2().setText(trocaArea2.getTrocaArea().getArea());
+		this.formularioVisualizacaoAluno.getTextFieldNroAlunosAreaAtual()
+				.setText(String.valueOf(trocaArea1.getAlunos()));
+		this.formularioVisualizacaoAluno.getTextFieldNroAlunosAreaAtual2()
+				.setText(String.valueOf(trocaArea2.getAlunos()));
+		this.formularioVisualizacaoAluno.getTextFieldVagasAreaAtual().setText(String.valueOf(trocaArea1.getVagas()));
+		this.formularioVisualizacaoAluno.getTextFieldVagasAreaAtual2().setText(String.valueOf(trocaArea2.getVagas()));
+		this.formularioVisualizacaoAluno.getTextFieldNroAlunosAreaTroca()
+				.setText(String.valueOf(trocaArea1.getTrocaArea().getAlunos()));
+		this.formularioVisualizacaoAluno.getTextFieldNroAlunosAreaTroca2()
+				.setText(String.valueOf(trocaArea2.getTrocaArea().getAlunos()));
+		this.formularioVisualizacaoAluno.getTextFieldVagasAreaTroca()
+				.setText(String.valueOf(trocaArea1.getTrocaArea().getVagas()));
+		this.formularioVisualizacaoAluno.getTextFieldVagasAreaTroca2()
+				.setText(String.valueOf(trocaArea2.getTrocaArea().getVagas()));
+		this.formularioVisualizacaoAluno.getTextAreaParecerAreasEnvolv()
+				.setText(trocaArea1.getFormularioResposta().getParecerAreas());
+		this.formularioVisualizacaoAluno.getTextAreaParecerCoordernador()
+				.setText(trocaArea1.getFormularioResposta().getParacerCoordenador());
 		int count = 0;
-		for (Modulos obj : m) {
-			this.pva.getTable().setValueAt(obj.getPeriodo(), count, 1);
-			this.pva.getTable().setValueAt(obj.getArea(), count, 2);
-			this.pva.getTable().setValueAt(obj.getArea_especifica(), count, 3);
+		for (Modulos obj : modulos) {
+			this.formularioVisualizacaoAluno.getTable().setValueAt(obj.getPeriodo(), count, 1);
+			this.formularioVisualizacaoAluno.getTable().setValueAt(obj.getAreaGeral(), count, 2);
+			this.formularioVisualizacaoAluno.getTable().setValueAt(obj.getAreaEspecifica(), count, 3);
 			count++;
 		}
 	}
@@ -80,28 +87,28 @@ public class FormularioVisualizacaoAlunoController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Sair")) {
-			alu = null;
-			TelaLogin tl = new TelaLogin();
-			tl.setVisible(true);
-			tl.setLocationRelativeTo(null);
-			new LoginController(tl);
-			this.pva.dispose();
+			aluno = null;
+			TelaLogin telaLogin = new TelaLogin();
+			telaLogin.setVisible(true);
+			telaLogin.setLocationRelativeTo(null);
+			new LoginController(telaLogin);
+			this.formularioVisualizacaoAluno.dispose();
 
 			JOptionPane.showMessageDialog(null, "Sua sessão foi encerrada com sucesso!", "Sucesso",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 		if (e.getActionCommand().equals("Página inicial")) {
-			TelaMenu ma2 = new TelaMenu();
-			ma2.setVisible(true);
-			this.pva.dispose();
-			ma2.setLocationRelativeTo(null);
-			new MenuAlunoController(alu, ma2);
+			TelaMenu telaMenu = new TelaMenu();
+			telaMenu.setVisible(true);
+			this.formularioVisualizacaoAluno.dispose();
+			telaMenu.setLocationRelativeTo(null);
+			new MenuAlunoController(aluno, telaMenu);
 		}
 
 		if (e.getActionCommand().equals("Sobre")) {
-			TelaSobre ts = new TelaSobre();
-			ts.setVisible(true);
-			ts.setLocationRelativeTo(null);
+			TelaSobre telaSobre = new TelaSobre();
+			telaSobre.setVisible(true);
+			telaSobre.setLocationRelativeTo(null);
 		}
 
 	}

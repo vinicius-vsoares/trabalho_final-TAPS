@@ -43,12 +43,12 @@ public class TelaFormulario extends JFrame {
 	private JTextField textTelefone;
 	private JLabel lblOutrasObservaes;
 	private JLabel label;
-	private Button Submit;
-	private Button Clean;
+	private Button enviar;
+	private Button limpar;
 	private JScrollPane scrollPane;
-	private JTextArea Obs;
+	private JTextArea observacao;
 	private JMenuBar menuBar;
-	private JMenuItem mntmSair,mntmPginaInicial, mntmSobre;
+	private JMenuItem mntmSair, mntmPginaInicial, mntmSobre;
 	private JTextField tfSerie;
 
 	/**
@@ -76,126 +76,130 @@ public class TelaFormulario extends JFrame {
 		setTitle("FORMUL\u00C1RIO PARA SOLICITA\u00C7\u00C3O DE TROCA DE M\u00D3DULO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 350);
-		
+
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow]", "[][][][][][grow][]"));
-		
+
 		JMenu mnMenu = new JMenu("Menu");
 		mnMenu.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		try {
-			mnMenu.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/menu_icon.png")).getScaledInstance(13, 13, Image.SCALE_DEFAULT)));
+			mnMenu.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/menu_icon.png"))
+					.getScaledInstance(13, 13, Image.SCALE_DEFAULT)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		menuBar.add(mnMenu);
-		
+
 		mntmPginaInicial = new JMenuItem("P\u00E1gina inicial");
 		try {
-			mntmPginaInicial.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/homepage.png")).getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
+			mntmPginaInicial.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/homepage.png"))
+					.getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		mntmPginaInicial.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		mnMenu.add(mntmPginaInicial);
-		
-		
+
 		mntmSair = new JMenuItem("Sair");
 		try {
-			mntmSair.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/exit.png")).getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
+			mntmSair.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/exit.png"))
+					.getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		mntmSair.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		mnMenu.add(mntmSair);
-		
+
 		mntmSobre = new JMenuItem("Sobre");
 		try {
-			mntmSobre.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/about.png")).getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
+			mntmSobre.setIcon(new ImageIcon(ImageIO.read(TelaMenu.class.getResource("/fig/about.png"))
+					.getScaledInstance(15, 15, Image.SCALE_DEFAULT)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		mntmSobre.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		mnMenu.add(mntmSobre);
-		
+
 		JLabel lblNome = new JLabel("Nome: ");
 		contentPane.add(lblNome, "flowx,cell 0 0,alignx leading");
-		
+
 		JLabel lblSrie = new JLabel("S\u00E9rie: ");
 		contentPane.add(lblSrie, "flowx,cell 0 1,alignx leading");
-		
-		String[] items = {" ","1","2","3","4","5","6","7","8","9","10"};
-		String [] dia = {" ","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23",
-				"24","25","26","27","28","29","30","31"};
-		String[] mes = {" ","Janeiro","Fevereiro","Março", "Abril", "Maio", "Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"};
-		String[] ano = {" ", "2019","2020","2021","2022","2023","2024", "2025"};
-		
+
+		String[] dia = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
+				"17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
+		String[] mes = { " ", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro",
+				"Outubro", "Novembro", "Dezembro" };
+		String[] ano = { " ", "2019", "2020", "2021", "2022", "2023", "2024", "2025" };
+
 		lblComeamdoEm = new JLabel("Come\u00E7ando em:");
 		contentPane.add(lblComeamdoEm, "flowx,cell 0 2");
-		
+
 		comboBoxDia = new JComboBox<Object>(dia);
 		contentPane.add(comboBoxDia, "cell 0 2");
-		
+
 		comboBoxMes = new JComboBox<Object>(mes);
-		comboBoxMes.setModel(new DefaultComboBoxModel(new String[] {" ", "Janeiro", "Fevereiro", "Mar\u00E7o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"}));
+		comboBoxMes.setModel(new DefaultComboBoxModel(new String[] { " ", "Janeiro", "Fevereiro", "Mar\u00E7o", "Abril",
+				"Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
 		contentPane.add(comboBoxMes, "cell 0 2");
-		
+
 		comboBoxAno = new JComboBox<Object>(ano);
 		contentPane.add(comboBoxAno, "cell 0 2");
-		
+
 		textNome = new JTextField();
 		contentPane.add(textNome, "cell 0 0,growx");
 		textNome.setColumns(10);
-		
+
 		tfSerie = new JTextField();
 		tfSerie.setEditable(false);
 		contentPane.add(tfSerie, "cell 0 1");
 		tfSerie.setColumns(5);
-		
+
 		lblreaDoEstgio = new JLabel("\u00C1rea do Est\u00E1gio: ");
 		contentPane.add(lblreaDoEstgio, "cell 0 1,alignx trailing");
-		
+
 		textArea = new JTextField();
 		contentPane.add(textArea, "cell 0 1,growx");
 		textArea.setColumns(10);
-		
+
 		lblNovarea = new JLabel("Nova \u00C1rea: ");
 		contentPane.add(lblNovarea, "flowx,cell 0 3,alignx leading");
-		
+
 		textNovaArea = new JTextField();
 		contentPane.add(textNovaArea, "cell 0 3,growx");
 		textNovaArea.setColumns(10);
-		
+
 		lblTelefone = new JLabel("Telefone:");
 		contentPane.add(lblTelefone, "flowx,cell 0 4");
-		
+
 		textTelefone = new JTextField();
 		contentPane.add(textTelefone, "cell 0 4");
 		textTelefone.setColumns(10);
-		
+
 		label = new JLabel("                  ||                  ");
 		contentPane.add(label, "cell 0 4");
-		
+
 		lblOutrasObservaes = new JLabel("Outras Observa\u00E7\u00F5es do Aluno:");
 		contentPane.add(lblOutrasObservaes, "cell 0 4");
-		
-		Obs = new JTextArea();
-		
-		scrollPane = new JScrollPane(Obs);
+
+		observacao = new JTextArea();
+
+		scrollPane = new JScrollPane(observacao);
 		contentPane.add(scrollPane, "cell 0 5,grow");
-		
-		Clean = new Button("Limpar");
-		contentPane.add(Clean, "flowx,cell 0 6,alignx trailing");
-		
-		Submit = new Button("Enviar");
-		contentPane.add(Submit, "cell 0 6,alignx trailing");
+
+		limpar = new Button("Limpar");
+		contentPane.add(limpar, "flowx,cell 0 6,alignx trailing");
+
+		enviar = new Button("Enviar");
+		contentPane.add(enviar, "cell 0 6,alignx trailing");
 		textNome.setEnabled(false);
 		textNome.setEditable(false);
 	}
@@ -207,8 +211,6 @@ public class TelaFormulario extends JFrame {
 	public void setTextNome(JTextField textNome) {
 		this.textNome = textNome;
 	}
-
-
 
 	public JTextField getTfSerie() {
 		return tfSerie;
@@ -263,27 +265,27 @@ public class TelaFormulario extends JFrame {
 	}
 
 	public Button getSubmit() {
-		return Submit;
+		return enviar;
 	}
 
 	public void setSubmit(Button submit) {
-		Submit = submit;
+		enviar = submit;
 	}
 
 	public Button getClean() {
-		return Clean;
+		return limpar;
 	}
 
 	public void setClean(Button clean) {
-		Clean = clean;
+		limpar = clean;
 	}
 
 	public JTextArea getObs() {
-		return Obs;
+		return observacao;
 	}
 
 	public void setObs(JTextArea obs) {
-		Obs = obs;
+		observacao = obs;
 	}
 
 	public JLabel getLblreaDoEstgio() {
@@ -314,7 +316,6 @@ public class TelaFormulario extends JFrame {
 		return scrollPane;
 	}
 
-
 	public JMenuItem getMntmSair() {
 		return mntmSair;
 	}
@@ -326,9 +327,5 @@ public class TelaFormulario extends JFrame {
 	public JMenuItem getMntmSobre() {
 		return mntmSobre;
 	}
-	
-	
-
-	
 
 }

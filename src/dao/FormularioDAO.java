@@ -4,61 +4,60 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import modelo.Aluno;
-import modelo.Formulario;
-import modelo.Usuario;
+import model.Aluno;
+import model.Formulario;
 
 public class FormularioDAO {
-	private Conexao conn;
-	private Formulario form;
+	private Conexao conexaoBD;
+	private Formulario formulario;
 
 	public FormularioDAO() {
-		conn = new Conexao();
+		conexaoBD = new Conexao();
 	}
 
 	public FormularioDAO(Formulario form) {
-		conn = new Conexao();
-		this.form = form;
+		conexaoBD = new Conexao();
+		this.formulario = form;
 	}
 
-	public boolean insertForm() {
+	public boolean insertFormulario() {
 		try {
-			int id = conn.execute(
+			int id = conexaoBD.execute(
 					"insert into Formulario(telefone,area_atual,area_nova,data_ini,data,obs,matricula_aluno,matricula_coord) values('"
-							+ form.getTelefone() + "','" + form.getArea_atual() + "','" + form.getArea_nova() + "','"
-							+ form.getData_ini() + "','" + form.getData() + "','" + form.getObs() + "','"
-							+ form.getAluno().getId_usuario() + "','" + form.getAluno().getMatricula_coord() + "');");
-			form.setId(id);
+							+ formulario.getTelefone() + "','" + formulario.getAreaAtual() + "','" + formulario.getNovaArea() + "','"
+							+ formulario.getDataInicio() + "','" + formulario.getData() + "','" + formulario.getObservacao() + "','"
+							+ formulario.getAluno().getIdUsuario() + "','" + formulario.getAluno().getMatriculaCoordenador() + "');");
+			formulario.setIdFormulario(id);
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	public ResultSet selectForm(String s) {
-		return conn.select("select * from Formulario f" + s);
+	public ResultSet selectFormulario(String s) {
+		return conexaoBD.select("select * from Formulario f" + s);
 	}
 
-	public void setForm(Formulario form) {
-		this.form = form;
+	public void setFormulario(Formulario form) {
+		this.formulario = form;
 	}
 
-	public Conexao getConn() {
-		return conn;
+	public Conexao getConexaoBD() {
+		return conexaoBD;
 	}
 
-	public void setConn(Conexao conn) {
-		this.conn = conn;
+	public void setConexaoBD(Conexao conn) {
+		this.conexaoBD = conn;
 	}
 
-	public boolean possuiFormularioAluno() {
-		conn.getConexao();
+	public boolean alunoPossuiFormulario() {
+		conexaoBD.getConexaoBD();
 		String query = "select count(id_form) as 'count' from Formulario where matricula_aluno ='"
-				+ form.getAluno().getId_usuario() + "';";
+				+ formulario.getAluno().getIdUsuario() + "';";
 		int linhas = 0;
 		try {
 
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
+			ResultSet res = conexaoBD.getCon().prepareStatement(query).executeQuery();
 			if (res.next())
 				linhas = Integer.parseInt(res.getString("count"));
 		} catch (SQLException e) {
@@ -72,12 +71,12 @@ public class FormularioDAO {
 	}
 
 	public boolean possuiFormularioCoordenador() {
-		conn.getConexao();
+		conexaoBD.getConexaoBD();
 		String query = "select count(id_form) as 'count' from Formulario where matricula_coord ='"
-				+ form.getCoord().getId_usuario() +"';";
+				+ formulario.getCoordenador().getIdUsuario() +"';";
 		int linhas = 0;
 		try {
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
+			ResultSet res = conexaoBD.getCon().prepareStatement(query).executeQuery();
 			if (res.next())
 				linhas = Integer.parseInt(res.getString("count"));
 		} catch (SQLException e) {
@@ -90,49 +89,49 @@ public class FormularioDAO {
 			return false;
 	}
 
-	public ArrayList<Aluno> retornaAlunoForm() {
-		ArrayList<Aluno> a = new ArrayList<>();
-		conn.getConexao();
+	public ArrayList<Aluno> retornaFormularioAluno() {
+		ArrayList<Aluno> arrayListAluno = new ArrayList<>();
+		conexaoBD.getConexaoBD();
 		String query = "select nome,matricula,serie from Usuario u,Formulario f,Aluno a where f.matricula_aluno = u.matricula and f.matricula_coord = '"
-				+ form.getCoord().getId_usuario() + "' and u.matricula = a.matricula_aluno;";
-		ResultSet res = conn.select(query);
+				+ formulario.getCoordenador().getIdUsuario() + "' and u.matricula = a.matricula_aluno;";
+		ResultSet resultSet = conexaoBD.select(query);
 		try {
-			while (res.next()) {
-				Aluno au = new Aluno();
-				au.setNome(res.getString("nome"));
-				au.setId_usuario(res.getString("matricula"));
-				au.setSerie(res.getInt("serie"));
-				a.add(au);
+			while (resultSet.next()) {
+				Aluno aluno = new Aluno();
+				aluno.setNome(resultSet.getString("nome"));
+				aluno.setIdUsuario(resultSet.getString("matricula"));
+				aluno.setSerie(resultSet.getInt("serie"));
+				arrayListAluno.add(aluno);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return a;
+		return arrayListAluno;
 	}
 
-	public Formulario getForm(Aluno aluno) {
-		form = new Formulario();
-		conn.getConexao();
-		String query = "select * from Formulario where matricula_aluno ='" + aluno.getId_usuario() + "';";
+	public Formulario getFormulario(Aluno aluno) {
+		formulario = new Formulario();
+		conexaoBD.getConexaoBD();
+		String query = "select * from Formulario where matricula_aluno ='" + aluno.getIdUsuario() + "';";
 		try {
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
-			res.next();
+			ResultSet resultSet = conexaoBD.getCon().prepareStatement(query).executeQuery();
+			resultSet.next();
 
-			form.setAluno(aluno);
-			form.setId(res.getLong("id_form"));
-			form.setArea_atual(res.getString("area_atual"));
-			form.setArea_nova(res.getString("area_nova"));
-			form.setData_ini(res.getString("data_ini"));
-			form.setData(res.getString("data_ini"));
-			form.setObs(res.getString("obs"));
-			form.setTelefone(res.getString("telefone"));
-			return form;
+			formulario.setAluno(aluno);
+			formulario.setIdFormulario(resultSet.getLong("id_form"));
+			formulario.setAreaAtual(resultSet.getString("area_atual"));
+			formulario.setNovaArea(resultSet.getString("area_nova"));
+			formulario.setDataInicio(resultSet.getString("data_ini"));
+			formulario.setData(resultSet.getString("data_ini"));
+			formulario.setObservacao(resultSet.getString("obs"));
+			formulario.setTelefone(resultSet.getString("telefone"));
+			return formulario;
 
 		} catch (SQLException e) {
 			return null;
 		} finally {
-			conn.close();
+			conexaoBD.close();
 		}
 	}
 

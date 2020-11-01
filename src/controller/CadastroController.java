@@ -6,106 +6,119 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import dao.AlunoDAO;
-import modelo.Aluno;
+import model.Aluno;
 import view.TelaCadastro;
 import view.TelaLogin;
 
 public class CadastroController implements ActionListener {
-	private TelaCadastro tc;
+	private TelaCadastro telaCadastro;
 
-	public CadastroController(TelaCadastro tc) {
+	public CadastroController(TelaCadastro telaCadastro) {
 		super();
-		this.tc = tc;
-		this.tc.getBtCadastro().addActionListener(this);
-		this.tc.getBtLimpar().addActionListener(this);
-		this.tc.getBtnRetornar().addActionListener(this);
+		this.telaCadastro = telaCadastro;
+		this.telaCadastro.getBtCadastro().addActionListener(this);
+		this.telaCadastro.getBtLimpar().addActionListener(this);
+		this.telaCadastro.getBtnRetornar().addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Limpar")) {
-			this.tc.getTfMatricula().setText("");
-			this.tc.getTfSenha().setText("");
-			this.tc.getCbSerie().setSelectedIndex(0);
-			this.tc.getTfNome().setText("");
+			limpar(telaCadastro);
 		}
 
 		if (e.getActionCommand().equals("Retornar")) {
-			TelaLogin tl = new TelaLogin();
-			tl.setVisible(true);
-			tl.setLocationRelativeTo(null);
-			new LoginController(tl);
-			this.tc.dispose();
+			TelaLogin telaLogin = new TelaLogin();
+			telaLogin.setVisible(true);
+			telaLogin.setLocationRelativeTo(null);
+			new LoginController(telaLogin);
+			this.telaCadastro.dispose();
 		}
 
 		if (e.getActionCommand().equals("Cadastrar")) {
-			if (!this.tc.getTfMatricula().getText().isEmpty() && (!(this.tc.getTfSenha().getPassword().length == 0))
-					&& this.tc.getCbSerie().getSelectedIndex() != 0 && !this.tc.getTfNome().getText().isEmpty()
-					&& !this.tc.getTfMatriculaCoor().getText().isEmpty()) {
+			if (!this.telaCadastro.getTfMatricula().getText().isEmpty()
+					&& (!(this.telaCadastro.getTfSenha().getPassword().length == 0))
+					&& this.telaCadastro.getCbSerie().getSelectedIndex() != 0
+					&& !this.telaCadastro.getTfNome().getText().isEmpty()
+					&& !this.telaCadastro.getTfMatriculaCoor().getText().isEmpty()) {
 				Aluno aluno = new Aluno();
-				aluno.setId_usuario(this.tc.getTfMatricula().getText());
-				aluno.setSenha(new String(this.tc.getTfSenha().getPassword()));
-				String aux = String.valueOf(this.tc.getCbSerie().getSelectedItem());
-				char aux2 = aux.charAt(0);
-				aluno.setSerie(Character.getNumericValue(aux2));
-				aluno.setId_usuario(this.tc.getTfMatricula().getText());
-				aluno.setNome(this.tc.getTfNome().getText());
-				aluno.setMatricula_coord(this.tc.getTfMatriculaCoor().getText());
-				AlunoDAO alDAO = new AlunoDAO(aluno);
+				aluno.setIdUsuario(this.telaCadastro.getTfMatricula().getText());
+				aluno.setSenha(new String(this.telaCadastro.getTfSenha().getPassword()));
+				String getItem = String.valueOf(this.telaCadastro.getCbSerie().getSelectedItem());
+				char serie = getItem.charAt(0);
+				aluno.setSerie(Character.getNumericValue(serie));
+				// aluno.setIdUsuario(this.telaCadastro.getTfMatricula().getText());
+				aluno.setNome(this.telaCadastro.getTfNome().getText());
+				aluno.setMatriculaCoordenador(this.telaCadastro.getTfMatriculaCoor().getText());
 
-				if (this.tc.getTfMatricula().getText().length() <= 11
-						&& this.tc.getTfSenha().getPassword().length <= 11) {
+				if (this.telaCadastro.getTfMatricula().getText().length() <= 11
+						&& this.telaCadastro.getTfSenha().getPassword().length <= 11) {
 
-					boolean matriculaNum = this.tc.getTfMatricula().getText().chars().allMatch(Character::isDigit);
+					boolean matriculaNum = this.telaCadastro.getTfMatricula().getText().chars()
+							.allMatch(Character::isDigit);
 					if (matriculaNum) {
 
 						if (aluno.getSenha().length() >= 3) {
 
-							if (alDAO.validaMatricula()) {
-
-								if (alDAO.validaCoordenador()) {
-									alDAO.insertAluno();
-									if (alDAO.isUsuario()) {
-										JOptionPane.showMessageDialog(tc, "Aluno cadastrado com sucesso!", "Sucesso",
-												JOptionPane.INFORMATION_MESSAGE);
-										this.tc.setVisible(false);
-										this.tc.dispose();
-										TelaLogin tl = new TelaLogin();
-										new LoginController(tl);
-										tl.setVisible(true);
-										tl.setLocationRelativeTo(null);
-									} else {
-										JOptionPane.showMessageDialog(tc, "Erro ao cadastrar aluno!", "Erro",
-												JOptionPane.WARNING_MESSAGE);
-									}
-								} else {
-									JOptionPane.showMessageDialog(tc, "Matricula de coordenador não encontrada!",
-											"Erro", JOptionPane.WARNING_MESSAGE);
-								}
-
-							} else {
-								JOptionPane.showMessageDialog(tc, "Matrícula já cadastrada!", "Erro",
-										JOptionPane.WARNING_MESSAGE);
-							}
+							insereAluno(aluno);
 
 						} else {
-							JOptionPane.showMessageDialog(tc, "Senha fraca. Por favor utilize uma senha mais forte!",
-									"Erro", JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(telaCadastro,
+									"Senha fraca. Por favor utilize uma senha mais forte!", "Erro",
+									JOptionPane.WARNING_MESSAGE);
 						}
 
 					} else {
-						JOptionPane.showMessageDialog(tc, "A matrícula é composta por somente números!", "Erro",
-								JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(telaCadastro, "A matrícula é composta por somente números!",
+								"Erro", JOptionPane.WARNING_MESSAGE);
 					}
 				} else {
-					JOptionPane.showMessageDialog(tc, "Senha ou matrícula muito grande. Tente novamente!", "Erro",
-							JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(telaCadastro, "Senha ou matrícula muito grande. Tente novamente!",
+							"Erro", JOptionPane.WARNING_MESSAGE);
 				}
 
 			} else {
-				JOptionPane.showMessageDialog(tc, "Existem campos não preenchidos!", "Erro",
+				JOptionPane.showMessageDialog(telaCadastro, "Existem campos não preenchidos!", "Erro",
 						JOptionPane.WARNING_MESSAGE);
 			}
 		}
+	}
+
+	public void limpar(TelaCadastro telaCadastro) {
+		this.telaCadastro.getTfMatricula().setText("");
+		this.telaCadastro.getTfSenha().setText("");
+		this.telaCadastro.getCbSerie().setSelectedIndex(0);
+		this.telaCadastro.getTfNome().setText("");
+	}
+
+	public boolean insereAluno(Aluno aluno) {
+		AlunoDAO alDAO = new AlunoDAO(aluno);
+		if (alDAO.validaMatricula()) {
+			if (alDAO.validaCoordenador()) {
+				alDAO.insertAluno();
+				if (alDAO.isUsuario()) {
+					JOptionPane.showMessageDialog(telaCadastro, "Aluno cadastrado com sucesso!", "Sucesso",
+							JOptionPane.INFORMATION_MESSAGE);
+					this.telaCadastro.setVisible(false);
+					this.telaCadastro.dispose();
+					TelaLogin telaLogin = new TelaLogin();
+					new LoginController(telaLogin);
+					telaLogin.setVisible(true);
+					telaLogin.setLocationRelativeTo(null);
+					return true;
+				} else {
+					JOptionPane.showMessageDialog(telaCadastro, "Erro ao cadastrar aluno!", "Erro",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			} else {
+				JOptionPane.showMessageDialog(telaCadastro, "Matricula de coordenador não encontrada!", "Erro",
+						JOptionPane.WARNING_MESSAGE);
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(telaCadastro, "Matrícula já cadastrada!", "Erro",
+					JOptionPane.WARNING_MESSAGE);
+		}
+		return false;
 	}
 }

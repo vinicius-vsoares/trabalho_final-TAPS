@@ -126,14 +126,12 @@ public class TelaCadastro extends JFrame {
 		btLimpar.setIcon(new ImageIcon(TelaCadastro.class.getResource("/fig/clean.png")));
 		btLimpar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		contentPane.add(btLimpar, "cell 0 2,alignx center,aligny center");
-		
+
 		btnRetornar = new JButton("Retornar");
 		btnRetornar.setIcon(new ImageIcon(TelaCadastro.class.getResource("/fig/icons8-retornar-24.png")));
 		btnRetornar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		contentPane.add(btnRetornar, "cell 0 2,alignx center,aligny center");
 	}
-	
-	
 
 	public JButton getBtnRetornar() {
 		return btnRetornar;
@@ -190,5 +188,5 @@ public class TelaCadastro extends JFrame {
 	public JTextField getTfMatriculaCoor() {
 		return tfMatriculaCoor;
 	}
-	
+
 }
