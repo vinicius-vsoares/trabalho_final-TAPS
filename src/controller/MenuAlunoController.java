@@ -5,43 +5,42 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import dao.FormularioDAO;
-import modelo.Aluno;
-import modelo.Formulario;
+import model.Aluno;
+import model.Formulario;
 import view.TelaMenu;
 import view.FormularioVisualizacaoAluno;
-import view.Panel_Aluno_sem_Formularios;
+import view.PanelAlunoSemFormularios;
 import view.TelaFormulario;
 import view.TelaLogin;
 import view.TelaSobre;
 
 public class MenuAlunoController implements ActionListener {
 	private Aluno aluno;
-	private TelaMenu ma;
+	private TelaMenu telaMenu;
 
-	public MenuAlunoController(Aluno aluno, TelaMenu ma) {
+	public MenuAlunoController(Aluno aluno, TelaMenu telaMenu) {
 		super();
 		this.aluno = aluno;
-		this.ma = ma;
-		this.ma.getMntmSair().addActionListener(this);
-		this.ma.getMntmPginaInicial().addActionListener(this);
+		this.telaMenu = telaMenu;
+		this.telaMenu.getMntmSair().addActionListener(this);
+		this.telaMenu.getMntmPginaInicial().addActionListener(this);
 		// this.ma.getMntmPerfil().addActionListener(this);
-		this.ma.getMntmSobre().addActionListener(this);
+		this.telaMenu.getMntmSobre().addActionListener(this);
 
-		Formulario form = new Formulario();
-		form.setAluno(aluno);
-		FormularioDAO formDAO = new FormularioDAO(form);
+		Formulario formulario = new Formulario();
+		formulario.setAluno(aluno);
+		FormularioDAO formularioDAO = new FormularioDAO(formulario);
 
-		if (formDAO.possuiFormularioAluno()) {
-			FormularioVisualizacaoAluno pva = new FormularioVisualizacaoAluno();
-			pva.setLocationRelativeTo(null);
-			pva.setVisible(true);
-			this.ma.dispose();
-			new FormularioVisualizacaoAlunoController(aluno, pva);
-
+		if (formularioDAO.alunoPossuiFormulario()) {
+			FormularioVisualizacaoAluno formularioVisualizacaoAluno = new FormularioVisualizacaoAluno();
+			formularioVisualizacaoAluno.setLocationRelativeTo(null);
+			formularioVisualizacaoAluno.setVisible(true);
+			this.telaMenu.dispose();
+			new FormularioVisualizacaoAlunoController(aluno, formularioVisualizacaoAluno);
 		} else {
-			Panel_Aluno_sem_Formularios paF = new Panel_Aluno_sem_Formularios();
-			paF.getBtCriarFormulário().addActionListener(this);
-			this.ma.add(paF);
+			PanelAlunoSemFormularios panelAlunoSemFormularios = new PanelAlunoSemFormularios();
+			panelAlunoSemFormularios.getBtCriarFormulário().addActionListener(this);
+			this.telaMenu.add(panelAlunoSemFormularios);
 		}
 	}
 
@@ -49,32 +48,32 @@ public class MenuAlunoController implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Sair")) {
 			aluno = null;
-			TelaLogin tl = new TelaLogin();
-			tl.setVisible(true);
-			tl.setLocationRelativeTo(null);
-			new LoginController(tl);
+			TelaLogin telaLogin = new TelaLogin();
+			telaLogin.setVisible(true);
+			telaLogin.setLocationRelativeTo(null);
+			new LoginController(telaLogin);
 
-			ma.dispose();
-			JOptionPane.showMessageDialog(ma, "Sua sessão foi encerrada com sucesso!", "Sucesso",
+			telaMenu.dispose();
+			JOptionPane.showMessageDialog(telaMenu, "Sua sessão foi encerrada com sucesso!", "Sucesso",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 		if (e.getActionCommand().equals("Página inicial")) {
-			TelaMenu ma2 = new TelaMenu();
-			new MenuAlunoController(aluno, ma2);
+			TelaMenu telaMenu = new TelaMenu();
+			new MenuAlunoController(aluno, telaMenu);
 		}
 
 		if (e.getActionCommand().equals("Sobre")) {
-			TelaSobre ts = new TelaSobre();
-			ts.setVisible(true);
-			ts.setLocationRelativeTo(null);
+			TelaSobre telaSobre = new TelaSobre();
+			telaSobre.setVisible(true);
+			telaSobre.setLocationRelativeTo(null);
 		}
 
 		if (e.getActionCommand().equals("Criar formulário")) {
-			TelaFormulario fa = new TelaFormulario();
-			fa.setVisible(true);
-			new FormularioCriacaoAlunoController(fa, aluno);
-			fa.setLocationRelativeTo(null);
-			this.ma.dispose();
+			TelaFormulario telaCriacaoFormulario = new TelaFormulario();
+			telaCriacaoFormulario.setVisible(true);
+			new FormularioCriacaoAlunoController(telaCriacaoFormulario, aluno);
+			telaCriacaoFormulario.setLocationRelativeTo(null);
+			this.telaMenu.dispose();
 		}
 
 	}

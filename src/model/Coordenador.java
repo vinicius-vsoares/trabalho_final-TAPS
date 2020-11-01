@@ -1,4 +1,4 @@
-package modelo;
+package model;
 
 public class Coordenador extends Usuario {
 
@@ -7,8 +7,8 @@ public class Coordenador extends Usuario {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Coordenador(String id, String nome, String senha) {
-		super(id, nome, senha);
+	public Coordenador(String idCoordenador, String nome, String senha) {
+		super(idCoordenador, nome, senha);
 		// TODO Auto-generated constructor stub
 	}
 

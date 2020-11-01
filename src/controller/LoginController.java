@@ -6,88 +6,85 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import dao.UsuarioDAO;
-import modelo.Aluno;
-import modelo.Coordenador;
-import modelo.Usuario;
+import model.Aluno;
+import model.Coordenador;
+import model.Usuario;
 import view.TelaMenu;
 import view.TelaCadastro;
 import view.TelaLogin;
 
 public class LoginController implements ActionListener {
-	private TelaLogin tl;
+	private TelaLogin telaLogin;
 
-	public LoginController(TelaLogin tl) {
+	public LoginController(TelaLogin telaLogin) {
 		super();
-		this.tl = tl;
-		this.tl.getBtLimpar().addActionListener(this);
-		this.tl.getBtCadastro().addActionListener(this);
-		this.tl.getBtLogin().addActionListener(this);
+		this.telaLogin = telaLogin;
+		this.telaLogin.getBtLimpar().addActionListener(this);
+		this.telaLogin.getBtCadastro().addActionListener(this);
+		this.telaLogin.getBtLogin().addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Limpar")) {
-			this.tl.getTfUsuario().setText("");
-			this.tl.getTfSenha().setText("");
+			this.telaLogin.getTfUsuario().setText("");
+			this.telaLogin.getTfSenha().setText("");
 		}
 		if (e.getActionCommand().equals("Cadastrar")) {
-			this.tl.setVisible(false);
-			this.tl.dispose();
-			TelaCadastro tc = new TelaCadastro();
-			new CadastroController(tc);
-			tc.setVisible(true);
-			tc.setLocationRelativeTo(null);
+			this.telaLogin.setVisible(false);
+			this.telaLogin.dispose();
+			TelaCadastro telaCadastro = new TelaCadastro();
+			new CadastroController(telaCadastro);
+			telaCadastro.setVisible(true);
+			telaCadastro.setLocationRelativeTo(null);
 		}
 
 		if (e.getActionCommand().equals("Logar")) {
-			if (!this.tl.getTfUsuario().getText().isEmpty() && (!(this.tl.getTfSenha().getPassword().length == 0))) {
-				if (!this.tl.getTfUsuario().getText().isEmpty()
-						&& (!(this.tl.getTfSenha().getPassword().length == 0))) {
+			if (!this.telaLogin.getTfUsuario().getText().isEmpty()
+					&& (!(this.telaLogin.getTfSenha().getPassword().length == 0))) {
+				if (!this.telaLogin.getTfUsuario().getText().isEmpty()
+						&& (!(this.telaLogin.getTfSenha().getPassword().length == 0))) {
 
 					Usuario usuarioLogin = new Usuario();
-					usuarioLogin.setId_usuario(this.tl.getTfUsuario().getText());
-					usuarioLogin.setSenha(new String(this.tl.getTfSenha().getPassword()));
+					usuarioLogin.setIdUsuario(this.telaLogin.getTfUsuario().getText());
+					usuarioLogin.setSenha(new String(this.telaLogin.getTfSenha().getPassword()));
 
-					UsuarioDAO usDAO = new UsuarioDAO(usuarioLogin);
-					Usuario usuario = usDAO.login();
+					UsuarioDAO usuarioDAO = new UsuarioDAO(usuarioLogin);
+					Usuario usuario = usuarioDAO.login();
+					TelaMenu telaMenu = new TelaMenu();
+					telaMenu.setVisible(true);
+					telaMenu.setLocationRelativeTo(null);
+					telaLogin.dispose();
 
 					if (usuario != null) {
-						Aluno aluno = usDAO.getAluno();
+						Aluno aluno = usuarioDAO.getAluno();
 						if (aluno != null) {
-							aluno.setId_usuario(usuario.getId_usuario());
+							aluno.setIdUsuario(usuario.getIdUsuario());
 							aluno.setNome(usuario.getNome());
 							aluno.setSenha(usuario.getSenha());
 
-							TelaMenu ma = new TelaMenu();
-							ma.setVisible(true);
-							ma.setLocationRelativeTo(null);
-							tl.dispose();
-							new MenuAlunoController(aluno, ma);
+							new MenuAlunoController(aluno, telaMenu);
 
 						} else {
 
 							// login coordenador
 
 							Coordenador coordenador = new Coordenador();
-							coordenador.setId_usuario(usuario.getId_usuario());
+							coordenador.setIdUsuario(usuario.getIdUsuario());
 							coordenador.setNome(usuario.getNome());
 							coordenador.setSenha(usuario.getSenha());
 
-							TelaMenu mn = new TelaMenu();
-							mn.setVisible(true);
-							mn.setLocationRelativeTo(null);
-							tl.dispose();
-							new MenuCoordenadorController(coordenador, mn);
-
+							new MenuCoordenadorController(coordenador, telaMenu);
 						}
 
 					} else {
-						JOptionPane.showMessageDialog(tl, "Senha ou matricula incorreto!", "Erro",
+						JOptionPane.showMessageDialog(telaLogin, "Senha ou matricula incorreto!", "Erro",
 								JOptionPane.WARNING_MESSAGE);
 					}
 
 				} else {
-					JOptionPane.showMessageDialog(tl, "Existem campos vazios!", "Erro", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(telaLogin, "Existem campos vazios!", "Erro",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}

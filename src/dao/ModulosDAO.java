@@ -4,57 +4,57 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import modelo.Modulos;
+import model.Modulos;
 
 public class ModulosDAO {
-	private Conexao conn;
-	private Modulos modu;
+	private Conexao conexaoBD;
+	private Modulos modulos;
 
 	public ModulosDAO() {
-		conn = new Conexao();
+		conexaoBD = new Conexao();
 	}
 
-	public ModulosDAO(Modulos modu) {
-		conn = new Conexao();
-		this.modu = modu;
+	public ModulosDAO(Modulos modulos) {
+		conexaoBD = new Conexao();
+		this.modulos = modulos;
 	}
 
 	public int insertModulos() {
-		return conn.execute("insert into modulos(area,area_especifica,periodo,id_formrp) values('" + modu.getArea() + "','"
-				+ modu.getArea_especifica() + "','" + modu.getPeriodo() +"',"+modu.getFormR().getId()+ ");");
+		return conexaoBD.execute("insert into modulos(area,area_especifica,periodo,id_formrp) values('" + modulos.getAreaGeral() + "','"
+				+ modulos.getAreaEspecifica() + "','" + modulos.getPeriodo() +"',"+modulos.getFormularioResposta().getIdFormulario()+ ");");
 	}
 	public ArrayList<Modulos> getModulos(){
-		ArrayList<Modulos> m = new ArrayList<Modulos>();
-		String query = "select * from modulos m where m.id_formrp ="+modu.getFormR().getId()+";";
-		ResultSet res = conn.select(query);
+		ArrayList<Modulos> arrayListModulos = new ArrayList<Modulos>();
+		String query = "select * from modulos m where m.id_formrp ="+modulos.getFormularioResposta().getIdFormulario()+";";
+		ResultSet resultSet = conexaoBD.select(query);
 		try {
-			while (res.next()) {
-				m.add(new Modulos(res.getLong("id_mod"),modu.getFormR(),res.getString("periodo"), res.getString("area"), res.getString("area_especifica")));
+			while (resultSet.next()) {
+				arrayListModulos.add(new Modulos(resultSet.getLong("id_mod"),modulos.getFormularioResposta(),resultSet.getString("periodo"), resultSet.getString("area"), resultSet.getString("area_especifica")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return m;
+		return arrayListModulos;
 	}
-	public ResultSet selectModu(String s) {
-		return conn.select("select * from modulos m" + s);
-	}
-
-	public Conexao getConn() {
-		return conn;
+	public ResultSet selectModulos(String s) {
+		return conexaoBD.select("select * from modulos m" + s);
 	}
 
-	public void setConn(Conexao conn) {
-		this.conn = conn;
+	public Conexao getConexao() {
+		return conexaoBD;
 	}
 
-	public Modulos getModu() {
-		return modu;
+	public void setConn(Conexao conexao) {
+		this.conexaoBD = conexao;
 	}
 
-	public void setModu(Modulos modu) {
-		this.modu = modu;
+	public Modulos getModulos2() {
+		return modulos;
+	}
+
+	public void setModulos(Modulos modulos) {
+		this.modulos = modulos;
 	}
 	
 }

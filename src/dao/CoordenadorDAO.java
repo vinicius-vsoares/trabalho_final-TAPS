@@ -3,41 +3,41 @@ package dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import modelo.Coordenador;
+import model.Coordenador;
 
 public class CoordenadorDAO {
-	private Conexao conn;
-	private Coordenador coord;
+	private Conexao conexaoBD;
+	private Coordenador coordenador;
 
-	public CoordenadorDAO(Coordenador coord) {
-		conn = new Conexao();
-		this.coord = coord;
+	public CoordenadorDAO(Coordenador coordenador) {
+		conexaoBD = new Conexao();
+		this.coordenador = coordenador;
 	}
 
 	public CoordenadorDAO() {
-		conn = new Conexao();
+		conexaoBD = new Conexao();
 	}
 
 	public void insertCoord() {
-		conn.execute("insert into Usuario(matricula,nome,senha) values('" + coord.getId_usuario() + "','"
-				+ coord.getNome() + "','" + coord.getSenha() + "');");
-		conn.execute("insert into Coordenador(matricula_coord) values(" + coord.getId_usuario() + ");");
+		conexaoBD.execute("insert into Usuario(matricula,nome,senha) values('" + coordenador.getIdUsuario() + "','"
+				+ coordenador.getNome() + "','" + coordenador.getSenha() + "');");
+		conexaoBD.execute("insert into Coordenador(matricula_coord) values(" + coordenador.getIdUsuario() + ");");
 	}
 
 	public ResultSet selectCoord(String s) {
-		return conn.select("select * from coordenador c" + s);
+		return conexaoBD.select("select * from coordenador c" + s);
 	}
 
 	public boolean isCoord() {
-		conn.getConexao();
+		conexaoBD.getConexaoBD();
 		String query = "select count(matricula_coord) as 'count' from Coordenador where matricula ='"
-				+ coord.getId_usuario() + "';";
+				+ coordenador.getIdUsuario() + "';";
 		int linhas = 0;
 		try {
 
-			ResultSet res = conn.getCon().prepareStatement(query).executeQuery();
-			if (res.next())
-				linhas = Integer.parseInt(res.getString("count"));
+			ResultSet resultSet = conexaoBD.getCon().prepareStatement(query).executeQuery();
+			if (resultSet.next())
+				linhas = Integer.parseInt(resultSet.getString("count"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,20 +48,20 @@ public class CoordenadorDAO {
 			return false;
 	}
 
-	public Coordenador getCoord() {
-		return coord;
+	public Coordenador getCoordenador() {
+		return coordenador;
 	}
 
-	public void setCoord(Coordenador coord) {
-		this.coord = coord;
+	public void setCoordenador(Coordenador coordenador) {
+		this.coordenador = coordenador;
 	}
 
-	public Conexao getConn() {
-		return conn;
+	public Conexao getConexao() {
+		return conexaoBD;
 	}
 
-	public void setConn(Conexao conn) {
-		this.conn = conn;
+	public void setConexao(Conexao conexao) {
+		this.conexaoBD = conexao;
 	}
 
 }
